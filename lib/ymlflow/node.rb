@@ -34,17 +34,19 @@ module Ymlflow
     def to_dot
       <<-"DOT"
   "#{@name}"[
-    shape = "#{shape}",
-    label = "#{build_label}"
+    shape = "none",
+    label = #{build_label}
   ]
       DOT
     end
 
     def build_label
-      label = "<title> #{name}\\l "
+      label = %Q|<<TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">|
+      label << "<TR><TD><B>#{@name}</B></TD></TR>"
       actions.each_with_index do |action, idx|
-        label << "|<action#{idx}> #{action.name.chomp.gsub("\n", '\l')}\\l "
+        label << %Q|<TR><TD ALIGN="LEFT" PORT="action#{idx}">#{action.name.chomp.gsub("\n", '<BR ALIGN="LEFT"/>')}<BR ALIGN="LEFT"/></TD></TR>|
       end
+      label << "</TABLE>>"
 
       label
     end
