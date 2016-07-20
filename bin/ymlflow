@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "ymlflow"
+
+graph = Ymlflow.parse(ARGV[0])
+
+puts "digraph D {"
+graph.settings.each do |title, settings|
+  puts "  #{title}["
+  settings.each do |k, v|
+    puts %Q|    #{k} = "#{v}"|
+  end
+  puts "  ]"
+end
+graph.nodes.each do |n|
+  puts n.to_dot
+end
+graph.edges.each do |e|
+  puts e.to_dot
+end
+puts "}"
